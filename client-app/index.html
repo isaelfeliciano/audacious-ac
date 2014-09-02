@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, inicial-scale=1">
+	<title>Audacious Control APP</title>
+	<link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css" />
+	<link rel="stylesheet" href="css/pure.css">
+	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css">
+	
+</head>
+<body>
+	<!-- <p>isael</p>
+	<input name="my-input" type="text">
+	<input type="button" value="enviar"> -->
+
+	<div data-role="page" id="main-page">
+		<div data-role="header">
+			<a id="btn-playlist" href="#" data-role="button" data-iconpos="left" class="ui-btn-right"><i class="fa fa-th-list"></i></a>
+			<h1>A.C.A</h1>
+		</div>
+		<div data-role="content" class="center"></div>
+			<img src="img/album-cover.jpg" class="pure-img center">
+		<div id="footer" data-role="footer" data-position="fixed" data-disable-page-zoom="true" class="center">
+			<a id="btn-backward" href="#" class="pure-button"><i class="fa fa-step-backward"></i></a>
+			<a id="btn-play" href="#" class="pure-button"><i class="fa fa-play fa-3x"></i></a>
+			<a id="btn-forward" href="#" class="pure-button"><i class="fa fa-step-forward"></i></a>
+		</div>
+	</div>
+
+	
+	<div data-role="page" id="playlist-page">
+		<div data-role="header"><h3>Playlist</h3></div>
+		<div data-role="content">
+			<ul id="playlist" data-role="listview">
+				<!-- <li><a href="#">Primera cancion</a></li>
+				<li><a href="#">Segunda cancion</a></li>
+				<li><a href="#">Tercera cancion</a></li> -->
+			</ul>
+		</div>
+		<div data-role="footer" data-position="fixed" data-disable-page-zoom="true"></div>
+	</div>
+
+	<script src="js/jquery.js"></script>
+	<script src="js/socket.io.js"></script>
+	<script src="js/jquery.mobile-1.4.3.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
