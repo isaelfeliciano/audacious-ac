@@ -4,3 +4,17 @@
 	margin-left: auto;
 	margin-right: auto;
 }
+
+.album-cover
+{
+	width: 50%;
+}
+
+.box-1
+{
+	padding-left: 3.5em;
+}
+.my-pure-box
+{
+	margin: 1px;
+}

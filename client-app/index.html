@@ -4,6 +4,9 @@
 	<meta name="viewport" content="width=device-width, inicial-scale=1">
 	<title>Audacious Control APP</title>
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css" />
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+	<link rel="stylesheet" href="css/jquery-ui.structure.min.css" />
+	<link rel="stylesheet" href="css/jquery-ui.theme.min.css" />
 	<link rel="stylesheet" href="css/pure.css">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
@@ -15,35 +18,83 @@
 	<input type="button" value="enviar"> -->
 
 	<div data-role="page" id="main-page">
-		<div data-role="header">
-			<a id="btn-playlist" href="#" data-role="button" data-iconpos="left" class="ui-btn-right"><i class="fa fa-th-list"></i></a>
+		<div data-role="header" data-position="fixed">
+			<a id="btn-playlist" href="#playlist-page" data-role="button" data-iconpos="left" class="ui-btn-right"><i class="fa fa-th-list"></i></a>
 			<h1>A.C.A</h1>
 		</div>
-		<div data-role="content" class="center"></div>
-			<img src="img/album-cover.jpg" class="pure-img center">
-		<div id="footer" data-role="footer" data-position="fixed" data-disable-page-zoom="true" class="center">
-			<a id="btn-backward" href="#" class="pure-button"><i class="fa fa-step-backward"></i></a>
-			<a id="btn-play" href="#" class="pure-button"><i class="fa fa-play fa-3x"></i></a>
-			<a id="btn-forward" href="#" class="pure-button"><i class="fa fa-step-forward"></i></a>
+		<div data-role="content" class="center" data-dom-cache="true"></div>
+		
+		<div class="pure-g">
+			<img src="img/album-cover.jpg" class="pure-img pure-u-3-5 center">
+			<div class="pure-u-1-5 center">
+				<div class="box-1"><div id="sliderVer" style="height:150px;"></div></div>
+			</div>
+		</div>
+		<div class="pure-g center my-pure-box">
+			<a href="#" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-repeat"></i></a>
+		
+			<a href="#" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-random"></i></a>
+		
+			<a href="#" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-th-list"></i></a>
+		</div>
+
+		<div data-role="footer" data-position="fixed" data-disable-page-zoom="true" class="center">
+			<a id="btn-backward" href="#" class="pure-button">
+				<i class="fa fa-step-backward"></i>
+			</a>
+
+			<a id="btn-play" href="#" class="pure-button">
+				<i id="btn-play-icon" class="fa fa-play fa-3x"></i>
+			</a>
+
+			<a id="btn-forward" href="#" class="pure-button">
+				<i class="fa fa-step-forward"></i>
+			</a>
 		</div>
 	</div>
 
 	
 	<div data-role="page" id="playlist-page">
-		<div data-role="header"><h3>Playlist</h3></div>
-		<div data-role="content">
-			<ul id="playlist" data-role="listview">
+		<div data-role="panel" id="playlistPanel" data-position="right" data-display="overlay" data-position-fixed="true">
+			<a href="#" class="pure-button"><i class="fa fa-cloud-download fa-lg"></i> Reload playlist</a>
+		</div>
+		<div data-role="header" data-position="fixed"><h3>Playlist</h3>
+			<a id="btn-home" href="#main-page" data-role="button" data-iconpos="left" class="ui-btn-left">
+				<i class="fa fa-home fa-lg"></i>
+			</a>
+
+			<a id="btn-home" href="#playlistPanel" data-role="button" data-iconpos="right" class="ui-btn-right">
+				<i class="fa fa-bars fa-lg"></i>
+			</a>
+		</div>
+		<div data-role="content" data-dom-cache="true">
+			<ul id="playlist" data-role="listview" data-icon="false">
 				<!-- <li><a href="#">Primera cancion</a></li>
 				<li><a href="#">Segunda cancion</a></li>
 				<li><a href="#">Tercera cancion</a></li> -->
 			</ul>
 		</div>
-		<div data-role="footer" data-position="fixed" data-disable-page-zoom="true"></div>
+		<div id="footer-2" data-role="footer" data-position="fixed" data-disable-page-zoom="true" class="center">
+			<a id="btn-backward-2" href="#" class="pure-button">
+				<i class="fa fa-step-backward">
+			</i></a>
+
+			<a id="btn-play-2" href="#" class="pure-button">
+				<i id="btn-play-icon-2" class="fa fa-play fa-3x"></i>
+			</a>
+
+			<a id="btn-forward-2" href="#" class="pure-button">
+				<i class="fa fa-step-forward"></i>
+			</a>
+		</div>
 	</div>
 
-	<script src="js/jquery.js"></script>
-	<script src="js/socket.io.js"></script>
-	<script src="js/jquery.mobile-1.4.3.min.js"></script>
-	<script src="js/main.js"></script>
+	<div data-role="page">
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.mobile-1.4.3.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/socket.io.js"></script>
+		<script src="js/main.js"></script>
+	</div>
 </body>
 </html>
