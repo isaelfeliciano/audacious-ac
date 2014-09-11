@@ -5,6 +5,11 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+var fs = require('fs');
+var jf = require('jsonfile');
+var async = require('async');
 
 var routes = require('./routes/index');
 var playlist = require('./routes/playlist');
@@ -27,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next){
     req.io = io;
+    req.app = app;
     next();
 });
 
@@ -65,7 +71,143 @@ app.use(function(err, req, res, next) {
     });
 });
 
+    io.on('connection', function(socket){
+        socket.emit('conectado');
+        console.log('Conectado');
+
+        socket.on("command", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("cmd-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("cmd-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });
+
+        socket.on("playback-status", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playback-status-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playback-status-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });
+
+        socket.on("playlist-repeat-status", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playlist-repeat-status-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playlist-repeat-status-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });
+
+        socket.on("setvolume", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', ['set-volume', cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                //socket.emit("playlist-repeat-status-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                //socket.emit("playlist-repeat-status-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });
 
 
+        socket.on("disconnect", function(){
+            console.log("socket: me he desconectado");
+            //socket.disconnect();
+        });
+
+        socket.on("hola", function(){
+            console.log('hola recibido');
+        });
+
+        socket.on("desconectar", function(data){
+            console.log("socket desconectado");
+            socket.emit("socket desconectado");
+            socket.disconnect();
+        });
+
+        
+
+        var execCmd = function(cmdToExecNew, callback){
+            rs = '';
+            cmd = spawn('audtool', cmdToExecNew);
+            cmd.stdout.on('data', function(data){
+                rs += data.toString();
+            });
+
+            cmd.stderr.on("data", function(data){
+                console.log("Ha surgido un error "+ data);
+            });
+
+            cmd.stdout.on('close', function(code){
+                return callback(rs);
+            });
+        };
+
+
+        
+    });
+    
 
 module.exports = app;
