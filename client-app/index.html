@@ -17,27 +17,46 @@
 	<input name="my-input" type="text">
 	<input type="button" value="enviar"> -->
 
-	<div data-role="page" id="main-page">
-		<div data-role="header" data-position="fixed">
-			<a id="btn-playlist" href="#playlist-page" data-role="button" data-iconpos="left" class="ui-btn-right"><i class="fa fa-th-list"></i></a>
-			<h1>A.C.A</h1>
-		</div>
-		<div data-role="content" class="center" data-dom-cache="true"></div>
-		
-		<div class="pure-g">
-			<img src="img/album-cover.jpg" class="pure-img pure-u-3-5 center">
-			<div class="pure-u-1-5 center">
-				<div class="box-1"><div id="sliderVer" style="height:150px;"></div></div>
+	<div data-role='page' id="intro-page" class="intro-page">
+		<div data-role="content" class="center">
+			<div class="bt-open">
+				<a href="#" data-role="none"><i class="fa fa-power-off fa-4x"></i></a> <br>
+				<p>Open Audacious</p>
 			</div>
 		</div>
-		<!-- <div class="pure-g center my-pure-box">
-			<a href="#" id="bt-repeat" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-repeat"></i></a>
-		
-			<a href="#" id="bt-random" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-random"></i></a>
-		
-			<a href="#" id="bt-playlist" class="my-pure-box pure-u-1-4 center pure-button-primary"><i class="fa fa-th-list"></i></a>
-		</div> -->
+	</div>
 
+	<div data-role='page' id="connection-page" class="connection-page">
+	<div data-role="content" data-dom-cache="true">	
+		<form>
+			<fieldset>
+				<input id="server-ip" type="text" placeholder="0.0.0.0">
+				<input id="server-port" type="text" placeholder="Port: 0000">
+			</fieldset>
+			<button id="bt-connect" class="ui-btn ui-btn-b">Connect</button>
+		</form>
+	</div>
+	</div>
+
+	<div data-role="page" id="main-page" class="my-content">
+		<div data-role="header" data-position="fixed">
+			<a id="btn-playlist" href="#playlist-page" data-role="button" data-iconpos="left" class="ui-btn-right"><i class="fa fa-th-list"></i></a>
+			<h1></h1>
+		</div>
+		<div data-role="content" data-dom-cache="true">		
+			<div class="pure-g">
+				<img src="img/album-cover.jpg" class="pure-img pure-u-3-5 center">
+				<div class="pure-u-1-5 center">
+					<div class="box-1"><div id="sliderVer" style="height:150px;"></div></div>
+				</div>
+			</div>
+
+			<div class="song-info">
+				<p class="song-title white"></p>
+				<p class="song-artist white"></p>
+				<p class="song-album white"></p>
+			</div>
+		</div>
 		<div data-role="footer" data-position="fixed" data-disable-page-zoom="true" class="center">
 			<a id="bt-repeat" href="#" class="pure-button">
 				<i class="fa fa-repeat"></i>

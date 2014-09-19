@@ -78,7 +78,7 @@ app.use(function(err, req, res, next) {
         socket.on("command", function(data){
             console.log(data.cmd);
             var cmdToExec = data.cmd;
-            cmd = spawn('audtool', [cmdToExec]);
+            cmd = (typeof(cmdToExec) == "string") ? spawn('audtool', [cmdToExec]) : spawn('audtool', cmdToExec);
 
             cmd.stdout.on('data', function(data){
                 resp = data;
@@ -147,6 +147,54 @@ app.use(function(err, req, res, next) {
             
         });
 
+        socket.on("playlist-random-status", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playlist-random-status-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("playlist-random-status-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });        
+
+        socket.on("get-volume", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("get-volume-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("get-volume-res-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });
+
         socket.on("setvolume", function(data){
             console.log(data.cmd);
             var cmdToExec = data.cmd;
@@ -170,6 +218,30 @@ app.use(function(err, req, res, next) {
 
             
         });
+
+        socket.on("get-current-song", function(data){
+            console.log(data.cmd);
+            var cmdToExec = data.cmd;
+            cmd = spawn('audtool', [cmdToExec]);
+
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("get-current-song-res", {cmdRes: resp.toString()});
+            });
+
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("get-current-song-res-err", {cmdRes: resp.toString()});
+            });
+
+            /*cmd.on('exit', function(code, signal){
+                console.log();
+            });*/
+
+            
+        });        
 
 
         socket.on("disconnect", function(){
@@ -205,8 +277,81 @@ app.use(function(err, req, res, next) {
             });
         };
 
+        var new_position;
+        var old_position;
+        setInterval(function(){
+            cmd = spawn('audtool', ['playlist-position']);
+            cmd.stdout.on('data', function(data){
+                resp = data;
+                new_position = resp.toString()
+                if(new_position !== old_position){
+                    socket.emit("get-current-song-res", {cmdRes: resp.toString()});
+                    old_position = new_position;
+                }else{
+                    old_position = new_position;
+                }
+            });
 
-        
+            cmd.stderr.on('data', function(data){
+                resp = data;
+                console.log(resp.toString());
+                socket.emit("get-current-song-res-err", {cmdRes: resp.toString()});
+            });           
+        },900);
+
+        socket.on('audacious-status', function(){
+            var cmd = exec('ps -C audacious', audaciousStatus);
+            function audaciousStatus(error, stdout, stderr){
+                stdout = stdout.split('\n');
+                stdout = stdout[1];
+                var sb = stdout.match(/\d*:\d*:\d*/);
+                if (error){
+                    if(error !== null){
+                        console.log('error: '+error);
+                        socket.emit('audacious-apagado');
+                        return;
+                    }
+                }
+                if(sb[0] !== '00:00:00'){
+                    //Encendido
+                    socket.emit('audacious-encendido');
+                }else{
+                    //Apagado
+                    socket.emit('audacious-apagado');
+                }
+            }
+        });
+
+
+        socket.on('encender', function(){
+            var cmd = exec('ps -C audacious', audaciousStatus);
+            function audaciousStatus(error, stdout, stderr){
+                stdout = stdout.split('\n');
+                stdout = stdout[1];
+                var sb = stdout.match(/\d*:\d*:\d*/);
+                if (error){
+                    if(error !== null){
+                        console.log('error: '+error);
+                        socket.emit('audacious-apagado');
+                        return;
+                    }
+                }
+                if(sb[0] !== '00:00:00'){
+                    //Encendido
+                    socket.emit('audacious-encendido');
+                }else{
+                    //Apagado-Encender
+                    var cmd = exec('audacious &', {timeout: 500}, function(error, stdout, stderr){
+                        if (error){
+                            socket.emit('encender-error');
+                        }else{
+                            socket.emit('audacious-encendido');
+                        }
+                    });
+                }
+            }
+        });
+
     });
     
 
